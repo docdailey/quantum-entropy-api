@@ -45,90 +45,39 @@ Response:
 }
 ```
 
-## 🔧 API Endpoints
+## 🔧 API Documentation
 
-### Random Data Generation
+### Interactive API Docs
+Full OpenAPI documentation with try-it-now functionality: https://quantum.docdailey.ai/docs
 
-#### `GET /api/v1/random/bytes`
-Generate quantum random bytes.
+### Quick Examples
 
-**Parameters:**
-- `count` (integer, 1-65536): Number of bytes to generate
-- `format` (string): Output format - `hex` (default), `base64`, or `raw`
-- `correction` (string): Bias correction - `none` (default), `von_neumann`, `matrix`
-
-**Example:**
+#### Get Random Bytes
 ```bash
-# Get 16 bytes with von Neumann correction
-curl "https://quantum-server.docdailey.ai/api/v1/random/bytes?count=16&correction=von_neumann"
+# Get 32 random bytes in hex format
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://quantum.docdailey.ai/random/bytes?count=32"
 ```
 
-#### `GET /api/v1/random/integers`
-Generate quantum random integers.
-
-**Parameters:**
-- `min` (integer): Minimum value (inclusive)
-- `max` (integer): Maximum value (inclusive)  
-- `count` (integer, 1-1000): Number of integers to generate
-
-**Example:**
+#### Generate Random Numbers
 ```bash
 # Roll 5 dice
-curl "https://quantum-server.docdailey.ai/api/v1/random/integers?min=1&max=6&count=5"
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://quantum.docdailey.ai/random/int?min=1&max=6&count=5"
 ```
 
-### Cryptographic Functions
+### Full API Reference
+See [API_REFERENCE.md](API_REFERENCE.md) for complete endpoint documentation, parameters, and examples.
 
-#### `GET /api/v1/crypto/password`
-Generate a secure password using quantum entropy.
+## 🤖 MCP Integration
 
-**Parameters:**
-- `length` (integer, 8-128): Password length
-- `uppercase` (boolean): Include uppercase letters
-- `lowercase` (boolean): Include lowercase letters
-- `digits` (boolean): Include numbers
-- `symbols` (boolean): Include special characters
+For advanced cryptographic operations, use our MCP (Model Context Protocol) integration:
+- Password generation with custom parameters
+- Cryptographic key generation  
+- UUID v4 generation
+- Entropy quality testing
 
-**Example:**
-```bash
-# Generate a 20-character password with symbols
-curl "https://quantum-server.docdailey.ai/api/v1/crypto/password?length=20&symbols=true"
-```
-
-#### `GET /api/v1/crypto/key`
-Generate cryptographic keys.
-
-**Parameters:**
-- `level` (integer): Security level in bits (128, 192, 256, 512)
-
-**Example:**
-```bash
-# Generate a 256-bit key
-curl "https://quantum-server.docdailey.ai/api/v1/crypto/key?level=256"
-```
-
-#### `GET /api/v1/crypto/uuid`
-Generate a UUID v4 using quantum randomness.
-
-**Example:**
-```bash
-curl "https://quantum-server.docdailey.ai/api/v1/crypto/uuid"
-```
-
-### Streaming Entropy
-
-#### `GET /api/v1/stream/raw`
-Stream continuous quantum entropy (use with caution!).
-
-**Parameters:**
-- `format` (string): Output format - `hex`, `base64`, `binary`
-- `correction` (string): Bias correction method
-
-**Example:**
-```bash
-# Stream raw entropy (Ctrl+C to stop)
-curl -N "https://quantum-server.docdailey.ai/api/v1/stream/raw?format=hex"
-```
+See [MCP_INTEGRATION.md](MCP_INTEGRATION.md) for details.
 
 ## 💻 Code Examples
 
@@ -137,36 +86,31 @@ curl -N "https://quantum-server.docdailey.ai/api/v1/stream/raw?format=hex"
 import requests
 import json
 
+API_KEY = "YOUR_API_KEY"
+headers = {"Authorization": f"Bearer {API_KEY}"}
+
 # Get random bytes
 def get_quantum_bytes(count=32):
     response = requests.get(
-        "https://quantum-server.docdailey.ai/api/v1/random/bytes",
-        params={"count": count}
+        "https://quantum.docdailey.ai/random/bytes",
+        params={"count": count},
+        headers=headers
     )
     data = response.json()
     return data['data']['bytes']
 
-# Generate quantum password
-def generate_quantum_password(length=16):
-    response = requests.get(
-        "https://quantum-server.docdailey.ai/api/v1/crypto/password",
-        params={"length": length, "symbols": True}
-    )
-    data = response.json()
-    return data['data']['password']
-
 # Get random integers for lottery
 def quantum_lottery(min_val=1, max_val=49, count=6):
     response = requests.get(
-        "https://quantum-server.docdailey.ai/api/v1/random/integers",
-        params={"min": min_val, "max": max_val, "count": count}
+        "https://quantum.docdailey.ai/random/int",
+        params={"min": min_val, "max": max_val, "count": count},
+        headers=headers
     )
     data = response.json()
-    return sorted(data['data'])
+    return sorted(data['data']['integers'])
 
 # Example usage
 print(f"Random bytes: {get_quantum_bytes(16)}")
-print(f"Secure password: {generate_quantum_password(20)}")
 print(f"Lottery numbers: {quantum_lottery()}")
 ```
 
