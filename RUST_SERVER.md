@@ -22,30 +22,32 @@ The quantum entropy server is built in Rust for maximum performance, safety, and
 
 ### Benchmarks
 
-Tested on: Ubuntu 22.04, Intel Xeon E5-2690v4 @ 2.60GHz, 32GB RAM
+Tested on: Ubuntu 22.04, Intel Celeron J3160 @ 1.60GHz, 8GB RAM
 
 #### Throughput Benchmarks
 
 ```
-Random Bytes Generation:
-├─ 32 bytes:    0.18ms average latency, 5,555 req/sec
-├─ 256 bytes:   0.31ms average latency, 3,225 req/sec  
-├─ 1024 bytes:  0.89ms average latency, 1,123 req/sec
-└─ 64KB:        48ms average latency,   20.8 req/sec
+Random Bytes Generation (single request):
+├─ 32 bytes:    ~28ms average latency (includes network overhead)
+├─ 256 bytes:   ~30ms average latency  
+├─ 1024 bytes:  ~30ms average latency
+└─ Response time is consistent due to buffer pre-fetching
 
-Concurrent Performance (100 connections):
-├─ 32 bytes:    45,000 req/sec aggregate
-├─ 256 bytes:   28,000 req/sec aggregate
-└─ 1024 bytes:  11,000 req/sec aggregate
+Concurrent Performance (real-world testing):
+├─ 10 concurrent connections:
+│  └─ 32 bytes:   2,649 req/sec (0.377ms per request)
+├─ 50 concurrent connections:
+│  └─ 256 bytes:  2,423 req/sec (0.413ms per request)
+└─ Limited by USB 2.0 bandwidth and CPU single-thread performance
 ```
 
 #### Memory Usage
 
 ```
-Base memory:     12 MB
-Under load:      35 MB (1000 concurrent connections)
+Base memory:     ~40 MB (actual production usage)
+CPU usage:       ~80% continuous (entropy collection from USB)
 Entropy buffer:  16 MB ring buffer
-Total typical:   ~50 MB resident
+Total typical:   ~40-50 MB resident
 ```
 
 ## 🔧 Technical Implementation
