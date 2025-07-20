@@ -2,32 +2,15 @@
 
 ## 🤖 Using with Claude and AI Assistants
 
-The Quantum Entropy API supports Model Context Protocol (MCP), allowing AI assistants like Claude to directly generate quantum random numbers.
+The Quantum Entropy API supports Model Context Protocol (MCP), allowing AI assistants like Claude to directly generate quantum random numbers using the `quantis-qrng` MCP server.
 
 ### Installation
 
-1. **Install the MCP server**:
-```bash
-npm install -g @quantum/mcp-server
-```
+The MCP server is already available and ready to use with Claude Desktop and other MCP-compatible clients.
 
-2. **Configure Claude Desktop** (or your MCP client):
+### Configuration
 
-Edit your Claude configuration file:
-```json
-{
-  "mcpServers": {
-    "quantum-entropy": {
-      "command": "npx",
-      "args": ["@quantum/mcp-server"],
-      "env": {
-        "QUANTUM_API_KEY": "your_api_key_here",
-        "QUANTUM_API_URL": "https://quantum.docdailey.ai"
-      }
-    }
-  }
-}
-```
+Configure your MCP client to use the quantum entropy server. For Claude Desktop, the configuration is typically already set up to include the `quantis-qrng` server.
 
 ### Available MCP Functions
 
@@ -98,6 +81,15 @@ Once configured, you can ask Claude:
 3. **Natural Language**: Just ask for what you need
 4. **Integrated Results**: Results appear directly in conversation
 5. **Secure**: API key stored in configuration, not in prompts
+
+### Available MCP Resources
+
+The quantum entropy MCP server also provides access to these resources:
+
+- **Device Information** (`quantis://device/info`) - Current Quantis device status
+- **Entropy Statistics** (`quantis://entropy/statistics`) - Real-time entropy generation stats
+- **Performance Metrics** (`quantis://performance/metrics`) - Device throughput data
+- **Bias Correction Matrices** (`quantis://bias/matrices`) - Available extraction matrices
 
 ### Setting Up Your Own MCP Server
 
